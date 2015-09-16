@@ -12,7 +12,7 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "pelago/emogrifier": "@dev",
+    "pelago/emogrifier": "@dev"
   },
 
   "autoload": {
