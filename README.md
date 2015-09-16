@@ -73,7 +73,7 @@ Go in extracted directory. There will be a directory called `bin`. We will need 
 
 ## Usage
 
-Unix example:
+Example:
 
 ```php
 <?php
