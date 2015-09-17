@@ -15,14 +15,14 @@ Please see how to use below.
 When you are in your active directory apps, you can just run this command to add this package on your app
 
 ```
-	composer require tonchik-tm/pdf-to-html:~1
+  composer require tonchik-tm/pdf-to-html:~1
 ```
 
 Or add this package to your `composer.json`
 
 ```json
 {
-	"tonchik-tm/pdf-to-html":"~1"
+  "tonchik-tm/pdf-to-html":"~1"
 }
 ```
 
@@ -45,7 +45,7 @@ For those who need this package in windows, there is a way. First download poppl
 
 After download it, extract it.
 
-### 2. We need to know where is utility
+### 2. We need to know where is utilities
 
 **Debian/Ubuntu**
 ```bash
@@ -73,7 +73,7 @@ Go in extracted directory. There will be a directory called `bin`. We will need 
 
 ## Usage
 
-Example:
+**Example:**
 
 ```php
 <?php
@@ -105,6 +105,35 @@ $contentFirstPage = $pdf->getHtml()->getPage(1);
 foreach ($pdf->getHtml()->getAllPages() as $page) {
     echo $page . '<br/>';
 }
+```
+
+**Full list settings:**
+
+```php
+<?php
+
+$full_settings = [
+    'pdftohtml_path' => '/usr/bin/pdftohtml', // path to pdftohtml
+    'pdfinfo_path' => '/usr/bin/pdfinfo', // path to pdfinfo
+
+    'generate' => [ // settings for generating html
+        'singlePage' => false, // we want separate pages
+        'imageJpeg' => false, // we want png image
+        'ignoreImages' => false, // we need images
+        'zoom' => 1.5, // scale pdf
+        'noFrames' => false, // we want separate pages
+    ],
+
+    'clearAfter' => true, // auto clear output dir (if removeOutputDir==false then output dir will remain)
+    'removeOutputDir' => true, // remove output dir
+    'outputDir' => '/tmp/'.uniqid(), // output dir
+
+    'html' => [ // settings for processing html
+        'inlineCss' => true, // replaces css classes to inline css rules
+        'inlineImages' => true, // looks for images in html and replaces the src attribute to base64 hash
+        'onlyContent' => true, // takes from html body content only
+    ]
+]
 ```
 
 ## Feedback & Contribute
