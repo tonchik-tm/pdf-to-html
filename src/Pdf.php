@@ -175,7 +175,8 @@ class Pdf extends Base
     private function generateOptions()
     {
         $generated = array();
-        array_walk($this->getOptions('generate'), function ($value, $key) use (&$generated) {
+        $generateValue = $this->getOptions('generate');
+        array_walk($generateValue, function ($value, $key) use (&$generated) {
             $result = '';
             switch ($key) {
                 case 'singlePage':
