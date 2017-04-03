@@ -32,7 +32,7 @@ class Html extends Base
 
     public function __construct($options=[])
     {
-        $this->setOptions(array_merge($this->defaultOptions, $options));
+        $this->setOptions(array_replace_recursive($this->defaultOptions, $options));
     }
 
     /**

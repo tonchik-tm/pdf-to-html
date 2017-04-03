@@ -42,7 +42,7 @@ class Base
     public function setOptions($key, $value=null)
     {
         if (is_array($key)) {
-            $this->options = array_merge($this->options, $key);
+            $this->options = array_replace_recursive($this->options, $key);
         } elseif (is_string($key)) {
             $this->options[$key] = $value;
         }

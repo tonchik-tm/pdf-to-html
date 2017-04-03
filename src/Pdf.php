@@ -20,6 +20,7 @@ class Pdf extends Base
     private $file = null;
     private $info = null;
     private $html = null;
+    private $result = null;
 
     private $defaultOptions = [
         'pdftohtml_path' => '/usr/bin/pdftohtml',
@@ -30,7 +31,7 @@ class Pdf extends Base
             'imageJpeg' => false,
             'ignoreImages' => false,
             'zoom' => 1.5,
-            'noFrames' => false,
+            'noFrames' => true,
         ],
 
         'outputDir' => '',
@@ -44,7 +45,7 @@ class Pdf extends Base
 
     public function __construct($file, $options=[])
     {
-        $this->setOptions(array_merge($this->defaultOptions, $options));
+        $this->setOptions(array_replace_recursive($this->defaultOptions, $options));
         $this->setFile($file)->setInfoObject()->setHtmlObject();
     }
 
@@ -146,9 +147,17 @@ class Pdf extends Base
         $fileinfo = pathinfo($this->file);
         $base_path = $this->getOutputDir() . '/' . $fileinfo['filename'];
 
-        for ($i = 1; $i <= $this->countPages(); $i++) {
-            $content = file_get_contents($base_path . '-' . $i . '.html');
-            $this->html->addPage($i, $content);
+        $countPages = $this->countPages();
+        if ($countPages) {
+            if ($countPages > 1)
+                for ($i = 1; $i <= $countPages; $i++) {
+                    $content = file_get_contents($base_path . '-' . $i . '.html');
+                    $this->html->addPage($i, $content);
+                }
+            else {
+                $content = file_get_contents($base_path . '.html');
+                $this->html->addPage(1, $content);
+            }
         }
 
         if ($this->getOptions('clearAfter'))
@@ -161,11 +170,32 @@ class Pdf extends Base
      */
     private function generate()
     {
+        $this->result = null;
+        $command = $this->getCommand();
+        $this->result = exec($command);
+        return $this;
+    }
+
+    /**
+     * Get command for generate html
+     * @return string
+     */
+    public function getCommand() {
+        if ($this->countPages() > 1)
+            $this->setOptions(['generate'=>['noFrames' => false]]);
         $output = $this->getOutputDir() . '/' . preg_replace("/\.pdf$/", '', basename($this->file)) . '.html';
         $options = $this->generateOptions();
         $command = $this->getOptions('pdftohtml_path') . ' ' . $options . ' ' . $this->file . ' ' . $output;
-        $result = exec($command);
-        return $this;
+        return $command;
+    }
+
+    /**
+     * Get result of generate html
+     * @return string|null
+     */
+    public function getResult()
+    {
+        return $this->result;
     }
 
     /**
