@@ -185,7 +185,7 @@ class Pdf extends Base
             $this->setOptions(['generate'=>['noFrames' => false]]);
         $output = $this->getOutputDir() . '/' . preg_replace("/\.pdf$/", '', basename($this->file)) . '.html';
         $options = $this->generateOptions();
-        $command = $this->getOptions('pdftohtml_path') . ' ' . $options . ' ' . escapeshellarg($this->file) . ' ' . $output;
+        $command = $this->getOptions('pdftohtml_path') . ' ' . $options . ' ' . escapeshellarg($this->file) . ' ' . escapeshellarg($output);
         return $command;
     }
 
