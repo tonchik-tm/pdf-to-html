@@ -56,7 +56,7 @@ class Html extends Base
         }
 
         $this->content[$number] = $content;
-        $this->pages = count($this->content[$number]);
+        $this->pages = count($this->content);
         return $this;
     }
 
