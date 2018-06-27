@@ -111,7 +111,7 @@ class Pdf extends Base
      */
     private function setInfoObject()
     {
-        $content = shell_exec($this->getOptions('pdfinfo_path') . ' ' . $this->file);
+        $content = shell_exec($this->getOptions('pdfinfo_path') . ' ' . escapeshellarg($this->file));
         $options = explode("\n", $content);
         $info = [];
         foreach($options as &$item) {
@@ -185,7 +185,7 @@ class Pdf extends Base
             $this->setOptions(['generate'=>['noFrames' => false]]);
         $output = $this->getOutputDir() . '/' . preg_replace("/\.pdf$/", '', basename($this->file)) . '.html';
         $options = $this->generateOptions();
-        $command = $this->getOptions('pdftohtml_path') . ' ' . $options . ' ' . $this->file . ' ' . $output;
+        $command = $this->getOptions('pdftohtml_path') . ' ' . $options . ' ' . escapeshellarg($this->file) . ' ' . escapeshellarg($output);
         return $command;
     }
 
