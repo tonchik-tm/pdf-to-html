@@ -1,7 +1,7 @@
 {
   "name": "tonchik-tm/pdf-to-html",
   "description": "This PHP class can convert your pdf files to html using poppler-utils.",
-  "license": "GNU GENERAL PUBLIC LICENSE",
+  "license": "MIT",
   "authors": [
     {
       "name": "Anton Nikolaev",
