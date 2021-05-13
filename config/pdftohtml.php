@@ -1,7 +1,7 @@
 <?php
 return [
-    'pdftohtml_path' => '/usr/bin/pdftohtml',
-    'pdfinfo_path' => '/usr/bin/pdfinfo',
+    'pdftohtml_path' => '/usr/local/bin/pdftohtml',
+    'pdfinfo_path' => '/usr/local/bin/pdfinfo',
     'generate' => [
         'singlePage' => false,
         'imageJpeg' => false,

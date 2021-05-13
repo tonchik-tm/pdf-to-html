@@ -15,7 +15,7 @@
     "pelago/emogrifier": "^5.0.0",
     "ext-dom": "*",
     "ext-fileinfo": "*",
-    "illuminate/support": "9.x-dev"
+    "illuminate/support": "^8.0|^7.0"
   },
   "autoload": {
     "psr-0": {
