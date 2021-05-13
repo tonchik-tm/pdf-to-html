@@ -10,7 +10,7 @@ namespace TonchikTm\PdfToHtml;
 
 use DOMDocument;
 use DOMXPath;
-use Pelago\Emogrifier;
+use Pelago\Emogrifier\CssInliner;
 
 /**
  * This class creates a collection of html pages with some improvements.
@@ -30,7 +30,7 @@ class Html extends Base
         'outputDir' => ''
     ];
 
-    public function __construct($options=[])
+    public function __construct($options = [])
     {
         $this->setOptions(array_replace_recursive($this->defaultOptions, $options));
     }
@@ -81,12 +81,12 @@ class Html extends Base
      * The method replaces css class to inline css rules.
      * @param $content
      * @return string
+     * @throws \Symfony\Component\CssSelector\Exception\ParseException
      */
     private function setInlineCss($content)
     {
         $content = str_replace(['<!--', '-->'], '', $content);
-        $parser = new Emogrifier($content);
-        return $parser->emogrify();
+        return CssInliner::fromHtml($content)->inlineCss()->render();
     }
 
     /**
@@ -102,7 +102,8 @@ class Html extends Base
         $xpath->registerNamespace("xml", "http://www.w3.org/1999/xhtml");
 
         $images = $xpath->query("//img");
-        foreach ($images as $img) { /** @var \DOMNode $img  */
+        foreach ($images as $img) {
+            /** @var \DOMNode $img */
             $attrImage = $img->getAttribute('src');
             $pi = pathinfo($attrImage);
             $image = $this->getOutputDir() . '/' . $pi['basename'];
@@ -128,7 +129,7 @@ class Html extends Base
 
         $html = '';
         $body = $xpath->query("//body")->item(0);
-        foreach($body->childNodes as $node) {
+        foreach ($body->childNodes as $node) {
             $html .= $dom->saveHTML($node);
         }
         unset($dom, $xpath, $body, $content);
