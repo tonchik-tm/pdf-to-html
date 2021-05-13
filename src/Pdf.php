@@ -22,30 +22,14 @@ class Pdf extends Base
     private $html = null;
     private $result = null;
 
-    private $defaultOptions = [
-        'pdftohtml_path' => '/usr/bin/pdftohtml',
-        'pdfinfo_path' => '/usr/bin/pdfinfo',
-
-        'generate' => [
-            'singlePage' => false,
-            'imageJpeg' => false,
-            'ignoreImages' => false,
-            'zoom' => 1.5,
-            'noFrames' => true,
-        ],
-
-        'outputDir' => '',
-        'removeOutputDir' => false,
-        'clearAfter' => true,
-
-        'html' => [
-            'inlineImages' => true,
-        ]
-    ];
-
-    public function __construct($file, $options=[])
+    public function __construct($file, $options = [])
     {
-        $this->setOptions(array_replace_recursive($this->defaultOptions, $options));
+        if (function_exists('config')) {
+            $config = config('pdftohtml');
+        } else {
+            $config = include(__DIR__ . '/../config/pdftohtml.php');
+        }
+        $this->setOptions(array_replace_recursive($config, $options));
         $this->setFile($file)->setInfoObject()->setHtmlObject();
     }
 
@@ -66,7 +50,7 @@ class Pdf extends Base
      */
     public function getInfo()
     {
-        if($this->info == null)
+        if ($this->info == null)
             $this->setInfoObject();
         return $this->info;
     }
@@ -77,7 +61,7 @@ class Pdf extends Base
      */
     public function countPages()
     {
-        if($this->info == null)
+        if ($this->info == null)
             $this->setInfoObject();
         return $this->info['pages'];
     }
@@ -114,8 +98,8 @@ class Pdf extends Base
         $content = shell_exec($this->getOptions('pdfinfo_path') . ' ' . escapeshellarg($this->file));
         $options = explode("\n", $content);
         $info = [];
-        foreach($options as &$item) {
-            if(!empty($item)) {
+        foreach ($options as &$item) {
+            if (!empty($item)) {
                 list($key, $value) = explode(':', $item);
                 $info[str_replace([' '], ['_'], strtolower($key))] = trim($value);
             }
@@ -180,9 +164,10 @@ class Pdf extends Base
      * Get command for generate html
      * @return string
      */
-    public function getCommand() {
+    public function getCommand()
+    {
         if ($this->countPages() > 1)
-            $this->setOptions(['generate'=>['noFrames' => false]]);
+            $this->setOptions(['generate' => ['noFrames' => false]]);
         $output = $this->getOutputDir() . '/' . preg_replace("/\.pdf$/", '', basename($this->file)) . '.html';
         $options = $this->generateOptions();
         $command = $this->getOptions('pdftohtml_path') . ' ' . $options . ' ' . escapeshellarg($this->file) . ' ' . escapeshellarg($output);

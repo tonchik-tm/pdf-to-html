@@ -10,20 +10,29 @@
       "role": "Developer"
     }
   ],
-  "minimum-stability": "dev",
   "require": {
     "php": ">=5.4.0",
     "pelago/emogrifier": "^5.0.0",
     "ext-dom": "*",
-    "ext-fileinfo": "*"
+    "ext-fileinfo": "*",
+    "illuminate/support": "^8.0|^7.0"
   },
-
   "autoload": {
     "psr-0": {
       "TonchikTm": "src"
     },
     "psr-4": {
       "TonchikTm\\PdfToHtml\\": "src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "laravel": {
+      "providers": "TonchikTm\\PdfToHtml\\PdfToHtmlServiceProvider"
     }
   }
 }
