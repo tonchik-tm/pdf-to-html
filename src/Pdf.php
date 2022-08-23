@@ -32,6 +32,7 @@ class Pdf extends Base
             'ignoreImages' => false,
             'zoom' => 1.5,
             'noFrames' => true,
+            'encoding' => 'UTF-8'
         ],
 
         'outputDir' => '',
@@ -224,6 +225,8 @@ class Pdf extends Base
                 case 'noFrames':
                     $result = $value ? '-noframes' : '';
                     break;
+                case 'encoding':
+                    $result = $value ? ('-enc ' . $value) : '';
             }
             $generated[] = $result;
         });
